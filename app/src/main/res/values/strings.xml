@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Movies App</string>
+    <string name="pop_movies">Pop Movies</string>
+    <string name="movie_detail">MovieDetail</string>
+    <string name="mark_favorite">Mark As Favorite</string>
+    <string name="action_settings">Setting</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="sorting_by">Sorting By</string>
+    <string name="pref_sort_label_popular">Most Popular</string>
+    <string name="pref_sort_label_rated">Top Rated</string>
+    <string name="pref_sort_label_favorite">Favorite</string>
+    <string name="pref_sort_popular" translatable="false">popular</string>
+    <string name="pref_sort_rated">top_rated</string>
+    <string name="pref_sort_favorite">favorite</string>
+    <string name="pref_sort_key">sorting</string>
+</resources>
