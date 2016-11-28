@@ -19,12 +19,11 @@ public class MainActivity extends AppCompatActivity implements MovieListener{
         setContentView(R.layout.activity_main);
         MoviesFragment moviesFragment = new MoviesFragment();
         moviesFragment.setMovieListener(this);
-
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movies_container, moviesFragment)
                     .commit();
 
-    if(findViewById(R.id.movie_details_container) != null)
+    if(findViewById(R.id.movie_details_container) != null) //if details fragment is in layout so it's two pane
     {
         mTwoPane = true;
     }
@@ -37,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements MovieListener{
     public void setMovieListener(Movie movie) {
         if(mTwoPane)
         {
+            //details fragment created by MainActivity
             DetailsFragment detailsFragment = new DetailsFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("Movie",movie);
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements MovieListener{
         }
         else
         {
+            //explicit intent sent to DetailsActivity to start
             Intent detailIntent = new Intent(this, DetailsActivity.class).putExtra("Movie",movie);
             startActivity(detailIntent);
         }

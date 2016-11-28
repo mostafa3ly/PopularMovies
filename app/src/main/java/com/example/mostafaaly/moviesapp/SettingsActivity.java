@@ -21,9 +21,11 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        //this block of code create a custom action bar in setting activity with back button
         LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
         Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.settings_toolbar, root, false);
         root.addView(bar, 0);
+        bar.setBackgroundColor(getResources().getColor(R.color.actionBar));
         bar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

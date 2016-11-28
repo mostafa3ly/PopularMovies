@@ -4,15 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:adjustViewBounds="true"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/author_name"/>
+        android:id="@+id/author_name"
+        android:padding="16dp"
+        android:textSize="20sp"
+        android:textColor="@android:color/black"
+        android:fontFamily="casual"
+        />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/review"/>
+        android:id="@+id/review"
+        android:padding="16dp"
+        android:gravity="center"
+        android:textSize="16sp"/>
 
 </LinearLayout>

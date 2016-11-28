@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Movies App</string>
-    <string name="pop_movies">Pop Movies</string>
-    <string name="movie_detail">MovieDetail</string>
+    <string name="pop_movies">Popular Movies</string>
+    <string name="movie_detail">Movie Detail</string>
     <string name="mark_favorite">Mark As Favorite</string>
     <string name="action_settings">Setting</string>
     <string name="action_refresh">Refresh</string>

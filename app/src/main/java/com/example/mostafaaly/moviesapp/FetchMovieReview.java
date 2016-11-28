@@ -104,9 +104,7 @@ public class FetchMovieReview extends AsyncTask<String,Void,Review[]> {
         }
 
         try {
-
             return getMovieTrailersFromJson(moviesJsonStr);
-
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -114,9 +112,14 @@ public class FetchMovieReview extends AsyncTask<String,Void,Review[]> {
         return null;
     }
 
+
+    /**
+     * @param movieJsonStr the json string downloaded from moviedb website
+     * @return  list of reviews of the movie
+     * @throws JSONException if there is an error in json parsing
+     */
     private Review[] getMovieTrailersFromJson(String movieJsonStr) throws JSONException
     {
-
         final String RESULTS = "results";
         final String CONTENT = "content";
         final String AUTHOR_NAME = "author";
@@ -124,6 +127,7 @@ public class FetchMovieReview extends AsyncTask<String,Void,Review[]> {
         JSONObject moviesJson = new JSONObject(movieJsonStr);
         JSONArray moviesJsonArray = moviesJson.getJSONArray(RESULTS);
         Review[] reviewsList = new Review[moviesJsonArray.length()];
+
         for (int i = 0; i < moviesJsonArray.length(); i++) {
             JSONObject movieResult = moviesJsonArray.getJSONObject(i);
             String key;
@@ -135,6 +139,7 @@ public class FetchMovieReview extends AsyncTask<String,Void,Review[]> {
         }
         return reviewsList;
     }
+
 
 
     @Override

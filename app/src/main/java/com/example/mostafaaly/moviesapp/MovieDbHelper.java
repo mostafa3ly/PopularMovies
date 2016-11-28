@@ -22,19 +22,24 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE "+ MovieContract.MovieEntry.TABLE_NAME + " ( " +
+        //creation query statement to create db table for favorites
+        final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE IF NOT EXISTS "+ MovieContract.MovieEntry.TABLE_NAME + " ( " +
+                MovieContract.MovieEntry.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 MovieContract.MovieEntry.MOVIE_ID + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.MOVIE_TITLE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.MOVIE_DATE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.MOVIE_OVERVIEW + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.MOVIE_RATE + " TEXT NOT NULL, " +
                 MovieContract.MovieEntry.MOVIE_POSTER + " TEXT NOT NULL " + ");";
-                Log.i("Creation error ",SQL_CREATE_MOVIE_TABLE);
+
+                //run the query
                 sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+        ////query for updating db table and run it
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
 

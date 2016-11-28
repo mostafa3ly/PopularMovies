@@ -13,10 +13,12 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        //put Intent data sent by another Activities into bundle arguments
         Intent sentIntent = getIntent();
         Bundle sentBundle = sentIntent.getExtras();
         DetailsFragment detailsFragment = new DetailsFragment();
         detailsFragment.setArguments(sentBundle);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_details_container, detailsFragment)

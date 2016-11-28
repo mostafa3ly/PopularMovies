@@ -114,6 +114,11 @@ public class FetchMovieTrailers extends AsyncTask<String,Void,Trailer[]> {
     return null;
     }
 
+    /**
+     * @param movieJsonStr the json string downloaded from moviedb website
+     * @return  list of trailers of the movie
+     * @throws JSONException if there is an error in json parsing
+     */
     private Trailer[] getMovieTrailersFromJson(String movieJsonStr) throws JSONException
     {
 
@@ -123,7 +128,9 @@ public class FetchMovieTrailers extends AsyncTask<String,Void,Trailer[]> {
 
         JSONObject moviesJson = new JSONObject(movieJsonStr);
         JSONArray moviesJsonArray = moviesJson.getJSONArray(RESULTS);
+
         Trailer[] trailerList = new Trailer[moviesJsonArray.length()];
+
         for (int i = 0; i < moviesJsonArray.length(); i++) {
             JSONObject movieResult = moviesJsonArray.getJSONObject(i);
             String key;

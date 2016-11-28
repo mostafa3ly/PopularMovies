@@ -9,6 +9,9 @@ public class MovieContract {
 
     private MovieContract(){}
     public static class MovieEntry implements BaseColumns{
+
+        //columns name added to db table
+        public static final String COLUMN_ID = "_id";
         public static final String TABLE_NAME = "movies";
         public static final String MOVIE_ID = "id";
         public static final String MOVIE_OVERVIEW = "overview";
