@@ -1,26 +1,20 @@
 package com.example.mostafaaly.moviesapp;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.SQLData;
 
 /**
  * Created by mosta on 11/19/2016.
@@ -102,7 +96,7 @@ public  class FetchMovieTask extends AsyncTask<String,Void,Movie[]> {
             final String MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/";
             final String APPID_PARAM = "api_key";
             Uri builtUri = Uri.parse(MOVIES_BASE_URL).buildUpon().
-                    appendPath(sortType).appendQueryParameter(APPID_PARAM,"API-KEY").build(); //replace API-KEY with your api key
+                    appendPath(sortType).appendQueryParameter(APPID_PARAM,"8da7b20e982e4969bdb63ad657026c6c").build(); //replace API-KEY with your api key
             URL url = new URL(builtUri.toString());
 
             urlConnection = (HttpURLConnection) url.openConnection();

@@ -6,35 +6,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.linearlistview.LinearListView;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by mosta on 11/9/2016.
@@ -68,7 +56,6 @@ public class DetailsFragment extends Fragment {
 
         //query condition statement of comparing id of showed movie and queried movie
         final String SELECTION = MovieContract.MovieEntry.MOVIE_ID + " = " + movie.getMovieId();
-
         //this block of code see if the movie is already in favorite list to change its case and fav button
         MovieDbHelper movieDbHelper = new MovieDbHelper(getContext());
         SQLiteDatabase sqLiteDatabase = movieDbHelper.getWritableDatabase();
