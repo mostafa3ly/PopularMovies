@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.mostafaaly.moviesapp.models.Movie;
+import com.example.mostafaaly.moviesapp.ui.adapters.MoviesAdapter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +50,8 @@ public  class FetchMovieTask extends AsyncTask<String,Void,Movie[]> {
         final String OVERVIEW = "overview";
         final String VOTE_AVERAGE = "vote_average";
         final String POSTER_PATH = "poster_path";
-        final String MOVIE_ID = "id";
+        final String ID = "id";
+        final String COVER_PATH = "backdrop_path";
 
         JSONObject moviesJson = new JSONObject(movieJsonStr);
         JSONArray moviesJsonArray = moviesJson.getJSONArray(RESULTS);
@@ -59,18 +63,19 @@ public  class FetchMovieTask extends AsyncTask<String,Void,Movie[]> {
             String overview;
             String date;
             String title;
-            String poster;
+            String posterPath;
             String rating;
             String id;
+            String coverPath;
 
             overview = movieResult.getString(OVERVIEW);
             date = movieResult.getString(RELEASE_DATE);
-            poster = movieResult.getString(POSTER_PATH);
+            posterPath = movieResult.getString(POSTER_PATH);
             title = movieResult.getString(TITLE);
             rating = movieResult.getString(VOTE_AVERAGE);
-            id = movieResult.getString(MOVIE_ID);
-            moviesList[i] = new Movie(title, poster, overview, date, rating,id);
-
+            id = movieResult.getString(ID);
+            coverPath = movieResult.getString(COVER_PATH);
+            //moviesList[i] = new Movie(title, posterPath, overview, date, rating,id,coverPath);
         }
 
         return moviesList;
@@ -100,13 +105,11 @@ public  class FetchMovieTask extends AsyncTask<String,Void,Movie[]> {
             URL url = new URL(builtUri.toString());
 
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod("POST");
             urlConnection.connect();
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
-
-
             if(inputStream ==  null)
             {
                 return null;

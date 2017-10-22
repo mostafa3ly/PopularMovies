@@ -12,16 +12,15 @@
         android:theme="@style/AppTheme"
         >
 
-        <activity android:name=".MainActivity" android:label="@string/pop_movies" >
+        <activity android:name=".ui.activities.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsActivity" android:parentActivityName=".MainActivity" android:label="@string/movie_detail" >
-        </activity>
-        <activity android:name=".SettingsActivity" android:parentActivityName=".MainActivity" android:label="@string/action_settings"></activity>
+        <activity android:name=".ui.activities.DetailsActivity"   android:label=""/>
     </application>
 
 </manifest>

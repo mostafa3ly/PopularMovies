@@ -11,17 +11,17 @@
         android:layout_height="match_parent"
         android:baselineAligned="false"
         android:orientation="horizontal">
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:id="@+id/MainActivity_FrameLayout_MoviesContainer"
-        android:layout_weight="1"
-        />
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:id="@+id/MainActivity_FrameLayout_DetailsContainer"
-        android:layout_weight="1"/>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/MainActivity_FrameLayout_MoviesContainer"
+            android:layout_weight="1"
+            />
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/MainActivity_FrameLayout_DetailsContainer"
+            android:layout_weight="2"/>
     </LinearLayout>
 
     <ListView
@@ -33,4 +33,4 @@
         android:background="#fff"
         />
 
-    </android.support.v4.widget.DrawerLayout>
+</android.support.v4.widget.DrawerLayout>
