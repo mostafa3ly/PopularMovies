@@ -12,11 +12,11 @@
     
     <ListView
         android:id="@+id/MainActivity_ListView_SortTypesList"
-        android:layout_width="240dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:background="#fff"
+        android:background="#3f3232"
         />
 
     </android.support.v4.widget.DrawerLayout>

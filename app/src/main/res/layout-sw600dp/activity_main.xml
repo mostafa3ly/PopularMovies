@@ -1,36 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/MainActivity_DrawerLayout_MainDrawer"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:baselineAligned="false"
         android:orientation="horizontal">
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:id="@+id/MainActivity_FrameLayout_MoviesContainer"
-        android:layout_weight="1"
-        />
-    <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:id="@+id/MainActivity_FrameLayout_DetailsContainer"
-        android:layout_weight="1"/>
+
+        <FrameLayout
+            android:id="@+id/MainActivity_FrameLayout_MoviesContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/MainActivity_FrameLayout_DetailsContainer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#000">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="cursive"
+                android:text="@string/show_time"
+                android:textColor="@android:color/white"
+                android:textSize="40sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:alpha=".2"
+                android:contentDescription="@string/movie_show"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cinema" />
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <ListView
         android:id="@+id/MainActivity_ListView_SortTypesList"
-        android:layout_width="240dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:background="#fff"
-        />
+        android:background="#3f3232"/>
 
-    </android.support.v4.widget.DrawerLayout>
+</android.support.v4.widget.DrawerLayout>

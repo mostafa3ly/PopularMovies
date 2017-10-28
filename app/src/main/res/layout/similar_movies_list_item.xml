@@ -29,7 +29,7 @@
             android:layout_gravity="bottom"
             android:background="#dfff"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:padding="3dp">
 
             <TextView
                 android:id="@+id/MoviesFragment_TextView_MovieTitle"

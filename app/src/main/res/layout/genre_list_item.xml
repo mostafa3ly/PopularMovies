@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/DetailsFragment_TextView_GenreName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginEnd="3dp"
+    android:layout_marginRight="3dp"
+    android:background="@drawable/genre_background"
+    android:gravity="center"
+    android:padding="3dp"
+    android:textColor="#fff"
+    android:textSize="12sp"
+    android:textStyle="bold" />

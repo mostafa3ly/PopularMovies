@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.mostafaaly.moviesapp.ui.activities.DetailsActivity" />
+    tools:context="com.example.mostafaaly.topmovies.ui.activities.DetailsActivity" />
 
 
