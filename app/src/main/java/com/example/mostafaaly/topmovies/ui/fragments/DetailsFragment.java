@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mostafaaly.topmovies.R;
 import com.example.mostafaaly.topmovies.data.MovieContract;
@@ -413,10 +414,12 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
                     if (mIsFavoriteMovie) {
                         addMovieToFavorites();
                         mAddToFavoriteFloatingActionButton.setImageResource(R.drawable.star_on);
+                        Toast.makeText(mContext,"Added to favorites",Toast.LENGTH_SHORT).show();
                     } else {
                         final String SELECTION = MovieContract.MovieEntry.MOVIE_ID + " = " + mShownMovie.getId();
                         mAddToFavoriteFloatingActionButton.setImageResource(R.drawable.star_off);
                         mSqLiteDatabase.delete(MovieContract.MovieEntry.TABLE_NAME, SELECTION, null);
+                        Toast.makeText(mContext,"Removed from favorites",Toast.LENGTH_SHORT).show();
                     }
                 }
 
