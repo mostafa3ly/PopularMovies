@@ -6,4 +6,4 @@ using Retrofit, SQLite DB and themoviedb.com RESTful API
 
 
 Download the APK
-getjar.mobi/mobile/944327/TopMovies
+https://www.getjar.com/mobile/944327/TopMovies
