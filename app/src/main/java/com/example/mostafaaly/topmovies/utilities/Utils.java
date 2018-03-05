@@ -43,45 +43,35 @@ public class Utils {
     private static final String TRAILERS_THUMBNAIL_BASE_URL = "https://img.youtube.com/vi/";
     public static final String YOUTUBE_WATCH_TRAILERS_BASE_URI = "http://www.youtube.com/watch?v=";
 
-    public static boolean checkNetworkConnection(Context context)
-    {
+    public static boolean checkNetworkConnection(Context context) {
         ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return  activeNetwork != null &&
+        return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
     }
 
-    public static String buildImageUrl (int width, String imagePath)
-    {
+    public static String buildImageUrl(int width, String imagePath) {
         return MOVIES_IMAGES_BASE_URL + "w" + width + imagePath;
     }
 
-    public static int getImageWidth (int density)
-    {
-        if(density < DisplayMetrics.DENSITY_HIGH)
-        {
+    public static int getImageWidth(int density) {
+        if (density < DisplayMetrics.DENSITY_HIGH) {
             return 185;
-        }
-        else if(density < DisplayMetrics.DENSITY_XHIGH)
-        {
+        } else if (density < DisplayMetrics.DENSITY_XHIGH) {
             return 342;
-        }
-        else
-        {
+        } else {
             return 500;
         }
     }
 
-    public static String buildThumbnailUrl (String videoKey)
-    {
+    public static String buildThumbnailUrl(String videoKey) {
         return TRAILERS_THUMBNAIL_BASE_URL + videoKey + "/0.jpg";
     }
 
 
-    public static boolean isFavoriteMovie(String movieId, Context context)
-    {
+    public static boolean isFavoriteMovie(String movieId, Context context) {
         SQLiteDatabase sqLiteDatabase = new MovieDbHelper(context).getWritableDatabase();
         final String[] PROJECTION = {
                 MovieContract.MovieEntry.MOVIE_ID
@@ -89,8 +79,7 @@ public class Utils {
         final String SELECTION = MovieContract.MovieEntry.MOVIE_ID + " = " + movieId;
         Cursor cursor = sqLiteDatabase.query(MovieContract.MovieEntry.TABLE_NAME,
                 PROJECTION, SELECTION, null, null, null, null);
-        if(cursor.moveToFirst() && cursor.getCount()!=0)
-        {
+        if (cursor.moveToFirst() && cursor.getCount() != 0) {
 
             cursor.close();
             return true;
@@ -99,9 +88,8 @@ public class Utils {
         return false;
     }
 
-    public static Retrofit getApiClient()
-    {
-        if (retrofit==null) {
+    public static Retrofit getApiClient() {
+        if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(MOVIES_DETAILS_BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -110,8 +98,7 @@ public class Utils {
         return retrofit;
     }
 
-    public interface ApiEndPointsInterface
-    {
+    public interface ApiEndPointsInterface {
         @GET("movie/{sort_type}")
         Call<MoviesResponse> getMoviesList(@Path("sort_type") String sortType, @Query("api_key") String apiKey);
 
@@ -129,63 +116,53 @@ public class Utils {
 
     }
 
-    public static String[] getMovieGenresNames (List<JsonObject> genres)
-    {
+    public static String[] getMovieGenresNames(List<JsonObject> genres) {
         String[] genresNames = new String[genres.size()];
-        for (int i=0; i<genres.size(); i++) {
-            genresNames[i]  = genres.get(i).get("name").toString().replace("\"","");
+        for (int i = 0; i < genres.size(); i++) {
+            genresNames[i] = genres.get(i).get("name").toString().replace("\"", "");
         }
         return genresNames;
     }
 
-    public static SpannableString getSpannableMovieCreditString(String string, int end)
-    {
-        SpannableString spannableStr=  new SpannableString(string);
-        spannableStr.setSpan(new StyleSpan(Typeface.BOLD), 0,end, 0);
-        spannableStr.setSpan(new ForegroundColorSpan(Color.BLACK), 0,end, 0);
+    public static SpannableString getSpannableMovieCreditString(String string, int end) {
+        SpannableString spannableStr = new SpannableString(string);
+        spannableStr.setSpan(new StyleSpan(Typeface.BOLD), 0, end, 0);
+        spannableStr.setSpan(new ForegroundColorSpan(Color.BLACK), 0, end, 0);
 
         return spannableStr;
     }
 
-    public static String getMovieStarringString(JsonArray castList)
-    {
+    public static String getMovieStarringString(JsonArray castList) {
         StringBuilder castStr = new StringBuilder();
-        for(int i=0; i<5; i++)
-        {
+        for (int i = 0; i < 5; i++) {
             try {
-
-
                 JsonObject actor = castList.get(i).getAsJsonObject();
                 castStr.append(actor.get("name").toString().replace("\"", ""));
                 if (i < 4)
                     castStr.append(", ");
-            }catch (JsonParseException e)
-            {
+            } catch (JsonParseException e) {
                 e.printStackTrace();
             }
         }
         return castStr.toString();
     }
 
-    public static String getMovieProducersString(JsonArray crewList,String job)
-    {
+    public static String getMovieProducersString(JsonArray crewList, String job) {
         StringBuilder producersStr = new StringBuilder();
-        for (int i=0; i<crewList.size(); i++)
-        {
+        for (int i = 0; i < crewList.size(); i++) {
             JsonObject crewMember = crewList.get(i).getAsJsonObject();
             try {
                 if (crewMember.get("job").toString().replace("\"", "").equals(job))
-                    producersStr.append(crewMember.get("name").toString().replace("\"", ""));
-                if(i<crewList.size()-1)
-                    producersStr.append(", ");
-            }
-            catch (JsonParseException e)
-            {
+                    producersStr.append(crewMember.get("name").toString().replace("\"", "")).append(", ");
+            } catch (JsonParseException e) {
                 e.printStackTrace();
             }
-
         }
-        return producersStr.toString();
+        String producers = producersStr.toString();
+        if(producers.length()>2)
+            producers = producers.substring(0,producers.length()-2);
+        
+        return producers;
     }
 
 
