@@ -19,6 +19,7 @@ import com.example.mostafaaly.topmovies.models.MoviesResponse;
 import com.example.mostafaaly.topmovies.models.TrailersResponse;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 import java.util.List;
 
@@ -148,44 +149,43 @@ public class Utils {
 
     public static String getMovieStarringString(JsonArray castList)
     {
-        String castStr = "";
+        StringBuilder castStr = new StringBuilder();
         for(int i=0; i<5; i++)
         {
             try {
 
 
                 JsonObject actor = castList.get(i).getAsJsonObject();
-                castStr += actor.get("name").toString().replace("\"", "");
+                castStr.append(actor.get("name").toString().replace("\"", ""));
                 if (i < 4)
-                    castStr += ", ";
-            }catch (Exception e)
+                    castStr.append(", ");
+            }catch (JsonParseException e)
             {
                 e.printStackTrace();
             }
         }
-        return castStr;
+        return castStr.toString();
     }
 
     public static String getMovieProducersString(JsonArray crewList,String job)
     {
-        String producersStr = "";
+        StringBuilder producersStr = new StringBuilder();
         for (int i=0; i<crewList.size(); i++)
         {
             JsonObject crewMember = crewList.get(i).getAsJsonObject();
             try {
                 if (crewMember.get("job").toString().replace("\"", "").equals(job))
-                    producersStr += crewMember.get("name").toString().replace("\"", "") + ", ";
+                    producersStr.append(crewMember.get("name").toString().replace("\"", ""));
+                if(i<crewList.size()-1)
+                    producersStr.append(", ");
             }
-            catch (Exception e)
+            catch (JsonParseException e)
             {
                 e.printStackTrace();
             }
 
         }
-        if(producersStr.length()>=2)
-        producersStr = producersStr.substring(0,producersStr.length()-2);
-
-        return producersStr;
+        return producersStr.toString();
     }
 
 

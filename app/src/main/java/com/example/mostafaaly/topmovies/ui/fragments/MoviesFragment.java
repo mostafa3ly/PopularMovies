@@ -35,7 +35,7 @@ import retrofit2.Response;
 /**
  * Created by Mostafa Aly on 21/10/2016.
  */
-public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener{
+public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.MoviesFragment_RecyclerView_MoviesList)
     RecyclerView mMoviesRecyclerView;
@@ -55,9 +55,9 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
-        ButterKnife.bind(this,rootView);
+        ButterKnife.bind(this, rootView);
         mSqLiteDatabase = new MovieDbHelper(getContext()).getReadableDatabase();
-        mMoviesAdapter = new MoviesAdapter(new ArrayList<Movie>(),getContext(),this,R.layout.movies_list_item);
+        mMoviesAdapter = new MoviesAdapter(new ArrayList<Movie>(), getContext(), this, R.layout.movies_list_item);
         mMoviesRecyclerView.setAdapter(mMoviesAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mContext = getContext();
@@ -65,8 +65,6 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
 
         return rootView;
     }
-
-
 
 
     @Override
@@ -123,25 +121,23 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
                         showOfflineStatus();
                     }
                 });
-            }
-            else {
+            } else {
                 showOfflineStatus();
             }
         }
     }
 
-    private void showOnlineStatus()
-    {
+    private void showOnlineStatus() {
         mLoadingProgressBar.setVisibility(View.GONE);
         mMoviesRecyclerView.setVisibility(View.VISIBLE);
 
     }
-    private void showOfflineStatus()
-    {
+
+    private void showOfflineStatus() {
         mLoadingProgressBar.setVisibility(View.GONE);
         mEmptyListTextView.setText(mContext.getString(R.string.no_connection));
-        if(mMoviesRecyclerView.getVisibility()==View.GONE)
-        mEmptyListTextView.setVisibility(View.VISIBLE);
+        if (mMoviesRecyclerView.getVisibility() == View.GONE)
+            mEmptyListTextView.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setEnabled(true);
     }
 
@@ -163,8 +159,7 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
                 projection, null, null, null, null, null
         );
 
-        if(cursor.getCount()==0)
-        {
+        if (cursor.getCount() == 0) {
             mEmptyListTextView.setText(mContext.getString(R.string.no_favorites));
             mEmptyListTextView.setVisibility(View.VISIBLE);
         }
@@ -187,5 +182,5 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
         mMoviesAdapter.add(movies);
         showOnlineStatus();
         cursor.close();
-        }
+    }
 }
