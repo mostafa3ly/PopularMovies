@@ -35,10 +35,13 @@ import com.example.mostafaaly.topmovies.data.MovieContract;
 import com.example.mostafaaly.topmovies.data.MovieDbHelper;
 import com.example.mostafaaly.topmovies.models.Movie;
 import com.example.mostafaaly.topmovies.models.MoviesResponse;
+import com.example.mostafaaly.topmovies.models.Review;
+import com.example.mostafaaly.topmovies.models.ReviewsResponse;
 import com.example.mostafaaly.topmovies.models.Trailer;
 import com.example.mostafaaly.topmovies.models.TrailersResponse;
 import com.example.mostafaaly.topmovies.ui.activities.MainActivity;
 import com.example.mostafaaly.topmovies.ui.adapters.MoviesAdapter;
+import com.example.mostafaaly.topmovies.ui.adapters.ReviewsAdapter;
 import com.example.mostafaaly.topmovies.ui.adapters.TrailersAdapter;
 import com.example.mostafaaly.topmovies.utilities.OnMovieClickedListener;
 import com.example.mostafaaly.topmovies.utilities.Utils;
@@ -119,10 +122,15 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
     RecyclerView mMoviesGenresRecyclerView;
     @BindView(R.id.DetailsActivity_FloatingActionButton_Favorite)
     FloatingActionButton mAddToFavoriteFloatingActionButton;
+    @BindView(R.id.DetailsFragment_TextView_ReviewsTitle)
+    TextView mMovieReviewTitleTextView;
+    @BindView(R.id.DetailsFragment_RecyclerView_ReviewsList)
+    RecyclerView mReviewsRecyclerView;
 
     public final static String ARG_MOVIE_KEY = "movie_key";
     private TrailersAdapter mTrailersAdapter;
     private MoviesAdapter mSimilarMoviesAdapter;
+    private ReviewsAdapter mReviewsAdapter;
     private OnMovieClickedListener mOnSimilarMovieClickListener;
     private Movie mShownMovie;
     private boolean mIsFavoriteMovie;
@@ -158,8 +166,10 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
         Bundle sentBundle = getArguments();
         mShownMovie = (Movie)sentBundle.getParcelable(ARG_MOVIE_KEY);
         mTrailersAdapter = new TrailersAdapter(new ArrayList<Trailer>(),mContext,this);
+        mReviewsAdapter = new ReviewsAdapter(new ArrayList<Review>(),mContext);
         mSimilarMoviesAdapter = new MoviesAdapter(new ArrayList<Movie>(),mContext,this,R.layout.similar_movies_list_item);
         mTrailersRecyclerView.setAdapter(mTrailersAdapter);
+        mReviewsRecyclerView.setAdapter(mReviewsAdapter);
         mSimilarMoviesRecyclerView.setAdapter(mSimilarMoviesAdapter);
         mSqLiteDatabase = new MovieDbHelper(mContext).getWritableDatabase();
         if(Utils.isFavoriteMovie(mShownMovie.getId().toString(),mContext))
@@ -181,12 +191,13 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
         if(Utils.checkNetworkConnection(mContext)) {
             fetchMovieDetails();
             updateTrailersList();
+            updateReviewsList();
             fetchSimilarMovies();
             fetchMovieCredits();
         }
         else
         {
-            dataFinishedCount = 4;
+            dataFinishedCount = 5;
             checkAllFetchFinish();
         }
 
@@ -281,7 +292,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
 
     private void checkAllFetchFinish() {
         dataFinishedCount++;
-        if(dataFinishedCount>3) {
+        if(dataFinishedCount>4) {
             mMovieFetchedDataProgressBar.setVisibility(View.GONE);
         }
     }
@@ -469,6 +480,30 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
             }
         });
 
+    }
+
+    private void updateReviewsList ()
+    {
+        Utils.ApiEndPointsInterface apiService = Utils.getApiClient().create(Utils.ApiEndPointsInterface.class);
+        Call<ReviewsResponse> call = apiService.getMovieReviews(mShownMovie.getId(),Utils.API_KEY);
+        call.enqueue(new Callback<ReviewsResponse>() {
+            @Override
+            public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
+                ReviewsResponse reviewsResponse = response.body();
+                if(reviewsResponse!=null) {
+                    List<Review> reviews = reviewsResponse.getResults();
+                    mReviewsAdapter.clear();
+                    mReviewsAdapter.add(reviews);
+                    if (reviews.size() > 0)
+                        mMovieReviewTitleTextView.setVisibility(View.VISIBLE);
+                }
+                checkAllFetchFinish();
+            }
+            @Override
+            public void onFailure(Call<ReviewsResponse> call, Throwable t) {
+                checkAllFetchFinish();
+            }
+        });
     }
 
     @Override

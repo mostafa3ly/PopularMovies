@@ -188,6 +188,28 @@
 
 
                 <TextView
+                    android:id="@+id/DetailsFragment_TextView_ReviewsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:text="@string/reviews"
+                    android:textAllCaps="true"
+                    android:textColor="#000"
+                    android:visibility="gone" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/DetailsFragment_RecyclerView_ReviewsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_small_margin"
+                    android:background="@android:color/white"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+
+                <TextView
                     android:id="@+id/DetailsFragment_TextView_MoreInformationTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -285,6 +307,7 @@
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:textSize="12sp"
+                    android:autoLink="web"
                     android:visibility="gone" />
 
                 <ProgressBar

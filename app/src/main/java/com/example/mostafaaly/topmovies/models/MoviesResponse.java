@@ -9,8 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class MoviesResponse implements Parcelable
-{
+public class MoviesResponse implements Parcelable {
 
     @SerializedName("page")
     @Expose
@@ -23,7 +22,7 @@ public class MoviesResponse implements Parcelable
     private Integer totalPages;
     @SerializedName("results")
     @Expose
-    private List<Movie> movies ;
+    private List<Movie> movies;
     public final static Parcelable.Creator<MoviesResponse> CREATOR = new Creator<MoviesResponse>() {
 
 
@@ -38,8 +37,7 @@ public class MoviesResponse implements Parcelable
             return (new MoviesResponse[size]);
         }
 
-    }
-            ;
+    };
 
     protected MoviesResponse(Parcel in) {
         this.page = ((Integer) in.readValue((Integer.class.getClassLoader())));

@@ -7,8 +7,10 @@ import android.provider.BaseColumns;
  */
 public class MovieContract {
 
-    private MovieContract(){}
-    public static class MovieEntry implements BaseColumns{
+    private MovieContract() {
+    }
+
+    public static class MovieEntry implements BaseColumns {
 
         public static final String COLUMN_ID = "_id";
         public static final String TABLE_NAME = "movies";

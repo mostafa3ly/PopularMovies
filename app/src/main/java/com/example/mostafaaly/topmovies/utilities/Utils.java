@@ -16,6 +16,7 @@ import com.example.mostafaaly.topmovies.data.MovieContract;
 import com.example.mostafaaly.topmovies.data.MovieDbHelper;
 import com.example.mostafaaly.topmovies.models.Movie;
 import com.example.mostafaaly.topmovies.models.MoviesResponse;
+import com.example.mostafaaly.topmovies.models.ReviewsResponse;
 import com.example.mostafaaly.topmovies.models.TrailersResponse;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -114,6 +115,9 @@ public class Utils {
         @GET("movie/{id}/credits")
         Call<JsonObject> getMovieCredits(@Path("id") int id, @Query("api_key") String apiKey);
 
+        @GET("movie/{id}/reviews")
+        Call<ReviewsResponse> getMovieReviews(@Path("id") int id, @Query("api_key") String apiKey);
+
     }
 
     public static String[] getMovieGenresNames(List<JsonObject> genres) {
@@ -159,9 +163,9 @@ public class Utils {
             }
         }
         String producers = producersStr.toString();
-        if(producers.length()>2)
+        if(producers.length()>=2)
             producers = producers.substring(0,producers.length()-2);
-        
+
         return producers;
     }
 

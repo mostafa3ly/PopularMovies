@@ -39,6 +39,7 @@
     <!--details titles-->
     <string name="trailers">Trailers</string>
     <string name="similar_movies">Similar Movies</string>
+    <string name="reviews">Reviews</string>
     <string name="cast">Cast</string>
     <string name="crew">Crew</string>
     <string name="starring">Starring %1$s</string>
