@@ -50,6 +50,7 @@
     <string name="revenue">Revenue</string>
     <string name="status">Status</string>
     <string name="homepage">Home page</string>
+    <string name="content_authority">com.example.mostafaaly.topmovies.app</string>
 
 
 </resources>

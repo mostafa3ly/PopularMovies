@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -32,7 +31,6 @@ import android.widget.Toast;
 
 import com.example.mostafaaly.topmovies.R;
 import com.example.mostafaaly.topmovies.data.MovieContract;
-import com.example.mostafaaly.topmovies.data.MovieDbHelper;
 import com.example.mostafaaly.topmovies.models.Movie;
 import com.example.mostafaaly.topmovies.models.MoviesResponse;
 import com.example.mostafaaly.topmovies.models.Review;
@@ -137,7 +135,6 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
     private boolean mIsMovieOverviewExpanded;
     private Context mContext;
     private int dataFinishedCount = 0;
-    SQLiteDatabase mSqLiteDatabase ;
     ActionBar mActionBar;
 
 
@@ -171,21 +168,23 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
         mTrailersRecyclerView.setAdapter(mTrailersAdapter);
         mReviewsRecyclerView.setAdapter(mReviewsAdapter);
         mSimilarMoviesRecyclerView.setAdapter(mSimilarMoviesAdapter);
-        mSqLiteDatabase = new MovieDbHelper(mContext).getWritableDatabase();
+
         if(Utils.isFavoriteMovie(mShownMovie.getId().toString(),mContext))
         {
             String[] projection = {
                     MovieContract.MovieEntry.MOVIE_POSTER_IMAGE
             };
             final String SELECTION = MovieContract.MovieEntry.MOVIE_ID + " = " + mShownMovie.getId();
-            Cursor cursor = mSqLiteDatabase.query(MovieContract.MovieEntry.TABLE_NAME,
-                    projection, SELECTION, null, null, null, null
+            Cursor cursor = mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                    projection, SELECTION, null, null
             );
             mIsFavoriteMovie = true;
             mAddToFavoriteFloatingActionButton.setImageResource(R.drawable.star_on);
-            cursor.moveToFirst();
-            mShownMovie.setPosterImage(cursor.getBlob(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_POSTER_IMAGE)));
-            cursor.close();
+            if(cursor!=null) {
+                cursor.moveToFirst();
+                mShownMovie.setPosterImage(cursor.getBlob(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_POSTER_IMAGE)));
+                cursor.close();
+            }
         }
         updateUI();
         if(Utils.checkNetworkConnection(mContext)) {
@@ -429,7 +428,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
                     } else {
                         final String SELECTION = MovieContract.MovieEntry.MOVIE_ID + " = " + mShownMovie.getId();
                         mAddToFavoriteFloatingActionButton.setImageResource(R.drawable.star_off);
-                        mSqLiteDatabase.delete(MovieContract.MovieEntry.TABLE_NAME, SELECTION, null);
+                        mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, SELECTION, null);
                         Toast.makeText(mContext,"Removed from favorites",Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -453,7 +452,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
         byte[] image = outputStream.toByteArray();
         values.put(MovieContract.MovieEntry.MOVIE_POSTER_IMAGE,image);
-        mSqLiteDatabase.insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
+        mContext.getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values);
     }
 
 

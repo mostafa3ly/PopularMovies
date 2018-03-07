@@ -2,7 +2,6 @@ package com.example.mostafaaly.topmovies.ui.fragments;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import com.example.mostafaaly.topmovies.R;
 import com.example.mostafaaly.topmovies.data.MovieContract;
-import com.example.mostafaaly.topmovies.data.MovieDbHelper;
 import com.example.mostafaaly.topmovies.models.Movie;
 import com.example.mostafaaly.topmovies.models.MoviesResponse;
 import com.example.mostafaaly.topmovies.ui.adapters.MoviesAdapter;
@@ -48,7 +46,6 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
     private MoviesAdapter mMoviesAdapter;
     public static final String ARG_SORT_TYPE_NUMBER = "sort_type_number";
     private OnMovieClickedListener mOnMovieClickedListener;
-    private SQLiteDatabase mSqLiteDatabase;
     private Context mContext;
 
     @Override
@@ -56,7 +53,6 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
         ButterKnife.bind(this, rootView);
-        mSqLiteDatabase = new MovieDbHelper(getContext()).getReadableDatabase();
         mMoviesAdapter = new MoviesAdapter(new ArrayList<Movie>(), getContext(), this, R.layout.movies_list_item);
         mMoviesRecyclerView.setAdapter(mMoviesAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -155,32 +151,35 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
                 MovieContract.MovieEntry.MOVIE_POSTER_IMAGE
         };
 
-        Cursor cursor = mSqLiteDatabase.query(MovieContract.MovieEntry.TABLE_NAME,
-                projection, null, null, null, null, null
+        Cursor cursor = mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                projection, null, null, null
         );
 
-        if (cursor.getCount() == 0) {
-            mEmptyListTextView.setText(mContext.getString(R.string.no_favorites));
-            mEmptyListTextView.setVisibility(View.VISIBLE);
-        }
+        if(cursor!=null) {
+            if (cursor.getCount() == 0) {
+                mEmptyListTextView.setText(mContext.getString(R.string.no_favorites));
+                mEmptyListTextView.setVisibility(View.VISIBLE);
+            }
 
-        List<Movie> movies = new ArrayList<>();
 
-        while (cursor.moveToNext()) {
-            Movie movie = new Movie();
-            movie.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_TITLE)));
-            movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_ID))));
-            movie.setOverview(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_OVERVIEW)));
-            movie.setReleaseDate(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_DATE)));
-            movie.setVoteAverage(Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_RATE))));
-            movie.setPosterPath(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_POSTER)));
-            movie.setBackdropPath(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_COVER)));
-            movie.setPosterImage(cursor.getBlob(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_POSTER_IMAGE)));
-            movies.add(movie);
+            List<Movie> movies = new ArrayList<>();
+
+            while (cursor.moveToNext()) {
+                Movie movie = new Movie();
+                movie.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_TITLE)));
+                movie.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_ID))));
+                movie.setOverview(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_OVERVIEW)));
+                movie.setReleaseDate(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_DATE)));
+                movie.setVoteAverage(Double.parseDouble(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_RATE))));
+                movie.setPosterPath(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_POSTER)));
+                movie.setBackdropPath(cursor.getString(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_COVER)));
+                movie.setPosterImage(cursor.getBlob(cursor.getColumnIndexOrThrow(MovieContract.MovieEntry.MOVIE_POSTER_IMAGE)));
+                movies.add(movie);
+            }
+            mMoviesAdapter.clear();
+            mMoviesAdapter.add(movies);
+            showOnlineStatus();
+            cursor.close();
         }
-        mMoviesAdapter.clear();
-        mMoviesAdapter.add(movies);
-        showOnlineStatus();
-        cursor.close();
     }
 }

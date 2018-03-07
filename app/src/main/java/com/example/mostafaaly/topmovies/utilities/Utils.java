@@ -2,7 +2,6 @@ package com.example.mostafaaly.topmovies.utilities;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
@@ -13,7 +12,6 @@ import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 
 import com.example.mostafaaly.topmovies.data.MovieContract;
-import com.example.mostafaaly.topmovies.data.MovieDbHelper;
 import com.example.mostafaaly.topmovies.models.Movie;
 import com.example.mostafaaly.topmovies.models.MoviesResponse;
 import com.example.mostafaaly.topmovies.models.ReviewsResponse;
@@ -73,19 +71,21 @@ public class Utils {
 
 
     public static boolean isFavoriteMovie(String movieId, Context context) {
-        SQLiteDatabase sqLiteDatabase = new MovieDbHelper(context).getWritableDatabase();
+
         final String[] PROJECTION = {
                 MovieContract.MovieEntry.MOVIE_ID
         };
         final String SELECTION = MovieContract.MovieEntry.MOVIE_ID + " = " + movieId;
-        Cursor cursor = sqLiteDatabase.query(MovieContract.MovieEntry.TABLE_NAME,
-                PROJECTION, SELECTION, null, null, null, null);
-        if (cursor.moveToFirst() && cursor.getCount() != 0) {
+        Cursor cursor = context.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                PROJECTION, SELECTION, null, null);
+        if(cursor!=null) {
+            if (cursor.moveToFirst() && cursor.getCount() != 0) {
 
+                cursor.close();
+                return true;
+            }
             cursor.close();
-            return true;
         }
-        cursor.close();
         return false;
     }
 
