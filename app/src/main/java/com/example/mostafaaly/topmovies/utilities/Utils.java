@@ -138,11 +138,11 @@ public class Utils {
 
     public static String getMovieStarringString(JsonArray castList) {
         StringBuilder castStr = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i<castList.size()&& i<5; i++) {
             try {
                 JsonObject actor = castList.get(i).getAsJsonObject();
                 castStr.append(actor.get("name").toString().replace("\"", ""));
-                if (i < 4)
+                if (i < castList.size()-1 && i<4)
                     castStr.append(", ");
             } catch (JsonParseException e) {
                 e.printStackTrace();
