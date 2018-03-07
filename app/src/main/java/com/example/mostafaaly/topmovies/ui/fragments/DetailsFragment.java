@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -425,17 +426,30 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
                         addMovieToFavorites();
                         mAddToFavoriteFloatingActionButton.setImageResource(R.drawable.star_on);
                         Toast.makeText(mContext,"Added to favorites",Toast.LENGTH_SHORT).show();
+                        notifyChange();
                     } else {
                         final String SELECTION = MovieContract.MovieEntry.MOVIE_ID + " = " + mShownMovie.getId();
                         mAddToFavoriteFloatingActionButton.setImageResource(R.drawable.star_off);
                         mContext.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, SELECTION, null);
                         Toast.makeText(mContext,"Removed from favorites",Toast.LENGTH_SHORT).show();
+                        notifyChange();
                     }
                 }
 
             }
         });
 
+    }
+
+    private void notifyChange ()
+    {
+        if(getActivity() instanceof MainActivity)
+        {
+
+            int index = PreferenceManager.getDefaultSharedPreferences(mContext).getInt(getString(R.string.pref_sort_key),0);
+            if(index == 4)
+            ((MainActivity) getActivity()).selectSortType(index);
+        }
     }
 
     private void addMovieToFavorites() {

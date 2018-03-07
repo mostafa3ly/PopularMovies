@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickedLis
         setTitle(mSortTypesTitles[sharedPreferences.getInt(getString(R.string.pref_sort_key),0)]);
     }
 
-    private void selectSortType(int position)
+    public void selectSortType(int position)
     {
         MoviesFragment moviesFragment = new MoviesFragment();
         Bundle args = new Bundle();
