@@ -11,14 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
+        android:visibility="gone"
         android:overScrollMode="never">
 
 
         <LinearLayout
+            android:id="@+id/details_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            >
 
             <ImageView
                 android:id="@+id/DetailsFragment_ImageView_MovieCover"
@@ -310,15 +312,18 @@
                     android:autoLink="web"
                     android:visibility="gone" />
 
-                <ProgressBar
-                    android:id="@+id/DetailsFragment_Progressbar_FetchedDataProgress"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center" />
+
             </LinearLayout>
 
         </LinearLayout>
+
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+
+    <ProgressBar
+        android:id="@+id/DetailsFragment_Progressbar_FetchedDataProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/DetailsActivity_FloatingActionButton_Favorite"

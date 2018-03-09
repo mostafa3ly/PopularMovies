@@ -3,8 +3,10 @@ package com.example.mostafaaly.topmovies.ui.fragments;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,25 +50,49 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
     private OnMovieClickedListener mOnMovieClickedListener;
     private Context mContext;
 
+
+    private static final String POSITION = "position";
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movies, container, false);
         ButterKnife.bind(this, rootView);
+
+        mContext = getContext();
         mMoviesAdapter = new MoviesAdapter(new ArrayList<Movie>(), getContext(), this, R.layout.movies_list_item);
         mMoviesRecyclerView.setAdapter(mMoviesAdapter);
+        String tag  = (String) mMoviesRecyclerView.getTag();
+        mMoviesRecyclerView.setLayoutManager(new GridLayoutManager(mContext,Integer.valueOf(tag)));
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        mContext = getContext();
         mSwipeRefreshLayout.setEnabled(false);
 
         return rootView;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState!=null)
+        {
+            mMoviesRecyclerView.getLayoutManager().scrollToPosition(savedInstanceState.getInt(POSITION));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION,((GridLayoutManager)mMoviesRecyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition());
+    }
+
 
 
     @Override
     public void onResume() {
         super.onResume();
         updateMoviesList();
+        setOnMovieClickListener((OnMovieClickedListener)(getActivity()));
     }
 
     @Override
@@ -84,6 +110,8 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
         updateMoviesList();
 
     }
+
+
 
     private void updateMoviesList() {
 
@@ -126,7 +154,6 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
     private void showOnlineStatus() {
         mLoadingProgressBar.setVisibility(View.GONE);
         mMoviesRecyclerView.setVisibility(View.VISIBLE);
-
     }
 
     private void showOfflineStatus() {
@@ -182,4 +209,7 @@ public class MoviesFragment extends Fragment implements MoviesAdapter.OnItemClic
             cursor.close();
         }
     }
+
+
+
 }

@@ -20,13 +20,15 @@ public class DetailsActivity extends AppCompatActivity implements OnMovieClicked
 
         Intent intent = getIntent();
         Bundle sentBundle = intent.getExtras();
-        DetailsFragment detailsFragment = new DetailsFragment();
-        detailsFragment.setArguments(sentBundle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        detailsFragment.setOnMovieClickListener(this);
+        if(savedInstanceState==null) {
+            DetailsFragment detailsFragment = new DetailsFragment();
+            detailsFragment.setArguments(sentBundle);
+            detailsFragment.setOnMovieClickListener(this);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.DetailsActivity_FrameLayout_DetailsContainer, detailsFragment)
                     .commit();
+        }
     }
 
     @Override

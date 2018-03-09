@@ -72,7 +72,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         Movie movie = moviesList.get(position);
 
         holder.titleTextView.setText(movie.getTitle());
-        String year = movie.getReleaseDate().substring(0,4);
+        String year = movie.getReleaseDate();
         holder.yearTextView.setText(year);
 
 

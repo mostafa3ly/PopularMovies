@@ -73,11 +73,15 @@ public class MainActivity extends AppCompatActivity implements OnMovieClickedLis
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.drawer_open,R.string.drawer_close);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        selectSortType(mSortNumber);
+
         setTitle(mSortTypesTitles[mSortNumber]);
 
         if(savedInstanceState!=null) {
             mShownMovieId = savedInstanceState.getInt(ARG_SHOWN_MOVIE_ID);
+        }
+        else
+        {
+            selectSortType(mSortNumber);
         }
 
 

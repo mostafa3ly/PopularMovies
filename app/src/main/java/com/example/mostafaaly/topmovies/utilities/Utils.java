@@ -11,6 +11,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.DisplayMetrics;
 
+import com.example.mostafaaly.topmovies.BuildConfig;
 import com.example.mostafaaly.topmovies.data.MovieContract;
 import com.example.mostafaaly.topmovies.models.Movie;
 import com.example.mostafaaly.topmovies.models.MoviesResponse;
@@ -38,7 +39,7 @@ public class Utils {
     private static final String MOVIES_IMAGES_BASE_URL = "http://image.tmdb.org/t/p/";
     private static final String MOVIES_DETAILS_BASE_URL = "http://api.themoviedb.org/3/";
     private static Retrofit retrofit = null;
-    public static final String API_KEY = "";  // add your api key here;
+    public static final String API_KEY = BuildConfig.MY_MOVIE_DB_API_KEY;
     private static final String TRAILERS_THUMBNAIL_BASE_URL = "https://img.youtube.com/vi/";
     public static final String YOUTUBE_WATCH_TRAILERS_BASE_URI = "http://www.youtube.com/watch?v=";
 

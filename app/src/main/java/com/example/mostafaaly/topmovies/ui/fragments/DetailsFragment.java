@@ -20,11 +20,11 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -66,6 +66,8 @@ import retrofit2.Response;
  */
 public class DetailsFragment extends Fragment implements ObservableScrollViewCallbacks,TrailersAdapter.OnItemClickListener,MoviesAdapter.OnItemClickListener{
 
+
+    private static String LOG_TAG = DetailsFragment.class.getSimpleName();
 
     @BindView(R.id.DetailsFragment_ScrollView_DetailsScroll)
     ObservableScrollView mDetailsScrollview;
@@ -125,6 +127,8 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
     TextView mMovieReviewTitleTextView;
     @BindView(R.id.DetailsFragment_RecyclerView_ReviewsList)
     RecyclerView mReviewsRecyclerView;
+    @BindView(R.id.details_view)
+    LinearLayout detailsView;
 
     public final static String ARG_MOVIE_KEY = "movie_key";
     private TrailersAdapter mTrailersAdapter;
@@ -137,18 +141,14 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
     private Context mContext;
     private int dataFinishedCount = 0;
     ActionBar mActionBar;
+    private static final String SCROLL_VIEW_POSITION = "position";
+
+    private int position = 0;
 
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(getActivity() instanceof MainActivity)
-            setOnMovieClickListener(((MainActivity)getActivity()));
-        else {
-            mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            setActionBarStyleAtTop();
-        }
-    }
+
+
+
 
 
 
@@ -201,8 +201,33 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
             checkAllFetchFinish();
         }
 
+
+
         return rootView;
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SCROLL_VIEW_POSITION,position);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(getActivity() instanceof MainActivity)
+            setOnMovieClickListener(((MainActivity)getActivity()));
+        else {
+            mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            setActionBarStyleAtTop();
+        }
+
+        if(savedInstanceState!=null) {
+            position = savedInstanceState.getInt(SCROLL_VIEW_POSITION);
+        }
+    }
+
+
 
 
     private void fetchMovieCredits() {
@@ -235,6 +260,15 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
 
     }
 
+    private void checkAllFetchFinish() {
+        dataFinishedCount++;
+        if(dataFinishedCount>4) {
+            mMovieFetchedDataProgressBar.setVisibility(View.GONE);
+            //detailsView.setVisibility(View.VISIBLE);
+            mDetailsScrollview.setVisibility(View.VISIBLE);
+            mDetailsScrollview.scrollVerticallyTo(position);
+        }
+    }
 
     private void fetchSimilarMovies()
     {
@@ -274,9 +308,6 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
                     mShownMovie.setRevenue(movie.getRevenue());
                     mShownMovie.setStatus(movie.getStatus());
                     mShownMovie.setHomepage(movie.getHomepage());
-
-                    Log.i("budget",mShownMovie.getBudget()+"");
-
                     updateRestUI();
                 }
                 checkAllFetchFinish();
@@ -290,12 +321,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
 
     }
 
-    private void checkAllFetchFinish() {
-        dataFinishedCount++;
-        if(dataFinishedCount>4) {
-            mMovieFetchedDataProgressBar.setVisibility(View.GONE);
-        }
-    }
+
 
 
     private void updateRestUI() {
@@ -327,7 +353,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
         mMovieRevenueTextView.setText(String.valueOf(mShownMovie.getRevenue()));
         mMovieHomepageTextView.setText(mShownMovie.getHomepage());
 
-        if(!mShownMovie.getStatus().isEmpty()) {
+        if(mShownMovie.getStatus()!=null && !mShownMovie.getStatus().isEmpty()) {
             mMovieStatusTitleTextView.setVisibility(View.VISIBLE);
             mMovieStatusTextView.setVisibility(View.VISIBLE);
             hasMoreInfo=true;
@@ -342,7 +368,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
             mMovieBudgetTextView.setVisibility(View.VISIBLE);
             hasMoreInfo = true;
         }
-        if(!mShownMovie.getHomepage().isEmpty()) {
+        if(mShownMovie.getHomepage()!=null && !mShownMovie.getHomepage().isEmpty()) {
             mMovieHomepageTitleTextView.setVisibility(View.VISIBLE);
             mMovieHomepageTextView.setVisibility(View.VISIBLE);
             hasMoreInfo = true;
@@ -387,7 +413,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
 
 
         mMovieTitleTextView.setText(mShownMovie.getTitle());
-        mMovieYearTextView.setText(mShownMovie.getReleaseDate().substring(0,4));
+        mMovieYearTextView.setText(mShownMovie.getReleaseDate());
         mMovieVoteRatingBar.setRating(mShownMovie.getVoteAverage().floatValue()/2f);
         mMovieOverviewTextView.setText(mShownMovie.getOverview());
 
@@ -470,6 +496,12 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setOnMovieClickListener((OnMovieClickedListener)getActivity());
+    }
+
     private void updateTrailersList(){
 
         Utils.ApiEndPointsInterface apiService = Utils.getApiClient().create(Utils.ApiEndPointsInterface.class);
@@ -541,6 +573,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
             }
 
         }
+        position = scrollY;
     }
 
 
@@ -559,6 +592,8 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
 
     }
+
+
 
     @Override
     public void onClick(Trailer trailer) {
