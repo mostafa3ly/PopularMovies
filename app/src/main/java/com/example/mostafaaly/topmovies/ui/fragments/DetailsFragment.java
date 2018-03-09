@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -127,8 +126,7 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
     TextView mMovieReviewTitleTextView;
     @BindView(R.id.DetailsFragment_RecyclerView_ReviewsList)
     RecyclerView mReviewsRecyclerView;
-    @BindView(R.id.details_view)
-    LinearLayout detailsView;
+
 
     public final static String ARG_MOVIE_KEY = "movie_key";
     private TrailersAdapter mTrailersAdapter;
@@ -264,7 +262,6 @@ public class DetailsFragment extends Fragment implements ObservableScrollViewCal
         dataFinishedCount++;
         if(dataFinishedCount>4) {
             mMovieFetchedDataProgressBar.setVisibility(View.GONE);
-            //detailsView.setVisibility(View.VISIBLE);
             mDetailsScrollview.setVisibility(View.VISIBLE);
             mDetailsScrollview.scrollVerticallyTo(position);
         }
